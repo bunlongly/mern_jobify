@@ -4,6 +4,7 @@ import express from "express";
 const app = express();
 import morgan from "morgan";
 import { nanoid } from "nanoid";
+import mongoose from "mongoose";
 
 // routers
 import jobRouter from "./routes/jobRouter.js";
@@ -23,7 +24,7 @@ app.post("/", (req, res) => {
   res.json({ message: "data received", data: req.body });
 });
 
-app.use("/api/v1/jobs", jobRouter)
+app.use("/api/v1/jobs", jobRouter);
 
 app.use("*", (req, res) => {
   res.status(200).json({ msg: "not found" });
@@ -36,6 +37,12 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 5200;
 
-app.listen(port, () => {
-  console.log(`Server running on PORT ${port}....`);
-});
+try {
+  await mongoose.connect(process.env.MONGO_URL);
+  app.listen(port, () => {
+    console.log(`server running on PORT ${port}....`);
+  });
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
