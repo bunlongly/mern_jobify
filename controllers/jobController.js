@@ -1,6 +1,5 @@
 import Job from "../models/JobModel.js";
 import { StatusCodes } from "http-status-codes";
-import { NotFoundError } from "../errors/customError.js";
 import mongoose from "mongoose";
 
 export const getAllJobs = async (req, res) => {
@@ -13,22 +12,29 @@ export const createJob = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ job });
 };
 
-export const getJob = async (req, res, next) => {
+// export const getJob = async (req, res, next) => {
+//   const { id } = req.params;
+//   try {
+//     const job = await Job.findById(id);
+//     if (!job) {
+//       throw new NotFoundError(`No job with id: ${id}`);
+//     }
+
+//     res.status(StatusCodes.OK).json({ job });
+//   } catch (error) {
+//     if (error instanceof mongoose.Error.CastError) {
+//       return next(new NotFoundError(`No job with id: ${id}`));
+//     }
+//     next(error); // Forward other types of errors to your error handling middleware
+//   }
+// };
+
+export const getJob = async (req, res) => {
   const { id } = req.params;
-  try {
-    const job = await Job.findById(id);
 
-    if (!job) {
-      throw new NotFoundError(`No job with id: ${id}`);
-    }
+  const job = await Job.findById(id);
 
-    res.status(StatusCodes.OK).json({ job });
-  } catch (error) {
-    if (error instanceof mongoose.Error.CastError) {
-      return next(new NotFoundError(`No job with id: ${id}`));
-    }
-    next(error); // Forward other types of errors to your error handling middleware
-  }
+  res.status(StatusCodes.OK).json({ job });
 };
 
 export const updateJob = async (req, res) => {
@@ -38,20 +44,12 @@ export const updateJob = async (req, res) => {
     new: true,
   });
 
-  if (!updatedJob) {
-    throw new NotFoundError(`No job with id: ${id}`);
-  }
-
   res.status(StatusCodes.OK).json({ msg: "job modified", job: updatedJob });
 };
 
 export const deleteJob = async (req, res) => {
   const { id } = req.params;
   const removedJob = await Job.findByIdAndDelete(id);
-
-  if (!removedJob) {
-    throw new NotFoundError(`No job with id: ${id}`);
-  }
 
   res.status(StatusCodes.OK).json({ job: removedJob });
 };
