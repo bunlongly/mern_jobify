@@ -3750,6 +3750,7 @@ import { toast } from "react-toastify";
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+
   try {
     await customFetch.post("/auth/login", data);
     toast.success("Login successful");
