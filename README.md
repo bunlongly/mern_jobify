@@ -5220,7 +5220,7 @@ import Job from "./models/JobModel.js";
 import User from "./models/UserModel.js";
 try {
   await mongoose.connect(process.env.MONGO_URL);
-  // const user = await User.findOne({ email: 'john@gmail.com' });
+  // const user = await User.findOne({ email: 'peter@gmail.com' });
   const user = await User.findOne({ email: "test@test.com" });
 
   const jsonJobs = JSON.parse(
