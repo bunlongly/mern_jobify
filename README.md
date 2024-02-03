@@ -6815,21 +6815,7 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
     navigate('/');
   };
 
-  customFetch.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error?.response?.status === 401) {
-        setIsAuthError(true);
-      }
-      return Promise.reject(error);
-    }
-  );
-  useEffect(() => {
-    if (!isAuthError) return;
-    logoutUser();
-  }, [isAuthError]);
+   
   return (
     ...
   )
